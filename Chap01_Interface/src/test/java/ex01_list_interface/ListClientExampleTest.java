@@ -1,6 +1,7 @@
 package ex01_list_interface;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.util.LinkedList;
@@ -16,7 +17,9 @@ public class ListClientExampleTest {
 		ListClientExample lce = new ListClientExample();
 		@SuppressWarnings("rawtypes")
 		List list = lce.getList();
-		assertThat(list, instanceOf(LinkedList.class));
+//		assertThat(list, instanceOf(LinkedList.class));
+		//이게 더 추천하는 메소드가 아닐까?
+		assertEquals(list, instanceOf(LinkedList.class));
 	}
 
 }
