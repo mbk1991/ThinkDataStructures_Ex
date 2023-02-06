@@ -2,6 +2,9 @@ package sort;
 
 public class SelectionSort {
 	/*
+	 * 빅오 표기법 :최악의 경우 소요 시간을 표기.
+	 * 상수O(1), 선형O(n), 이차O(n^2)
+	 * 
 	 * 01.i와 j의 위치를 바꾼다.
 	 */
 	public static void swapElements(int[] array, int i, int j) {
