@@ -1,5 +1,13 @@
 package com.allendowney.thinkdast;
 
-public class MyArrayListTest {
+import org.junit.Test;
 
+public class MyArrayListTest {
+	
+	@Test
+	public void add() {
+		MyArrayList<Integer> mal = new MyArrayList<Integer>();
+		mal.add(1);
+		mal.add(2);
+	}
 }

@@ -12,172 +12,211 @@ import java.util.ListIterator;
  * @param <T>
  */
 
-
+//List인터페이스를 MyArrayList로 구현한다.
 public class MyArrayList<T> implements List<T> {
-	private T[] array;
 	int size;
-	
+	private T[] array;
+
 	@SuppressWarnings("unchecked")
 	public MyArrayList() {
-		array = (T[]) new Object[10];
 		size = 0;
+		array = (T[]) new Object[10];
 	}
-	
+
 	public static void main(String[] args) {
 		MyArrayList<Integer> mal = new MyArrayList<>();
 		mal.add(1);
 		mal.add(2);
 		mal.add(3);
-		System.out.println(Arrays.toString(mal.toArray())+" size = " + mal.size);
-		
+		System.out.println(Arrays.toString(mal.toArray()) + " size = " + mal.size);
+
 		mal.remove(new Integer(2));
 		System.out.println(Arrays.toString(mal.toArray()) + " size= " + mal.size);
-	}
-	
-	
-
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
 	public boolean add(T element) {
-		return false;
-	}
-	
-	public void add(int index, T element) {
-		if(index < 0 || index> size) {
-			throw new IndexOutBoundsException();
+		if(size >= array.length) {
+			T[] bigger = (T[]) new Object[array.length*2];
+			System.arraycopy(array,0,bigger,0,array.length);
+			array = bigger;
 		}
+		array[size] = element;
+		size++;
+		return true;
+	}
+
+	@Override
+	public void add(int index, T element) {
+
+		// 01. index validation 체크
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException();
+		}
+		// 02.element를 add하면서 array배열 사이즈를 1 늘린다.
 		add(element);
+
+		// 03.[index+1] 위치부터 한 칸 씩 뒤로 이동시킨다.
+		for (int i = size - 1; i > index; i--) {
+			array[i] = array[i - 1];
+		}
+		// 04.index위치에 element를 할당한다.
+		array[index] = element;
 	}
 
 	@Override
-	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addAll(Collection<? extends T> collection) {
+
+		// 01.플래그 선언 및 true 초기화
+		boolean flag = true;
+
+		// 02.
+		for (T element : collection) {
+			flag &= add(element); // flag = flag & add(element)
+		}
+		return flag;
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addAll(int index, Collection<? extends T> collection) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		size = 0;
+	}
+
+	@Override
+	public boolean contains(Object obj) {
+		return indexOf(obj) != -1;
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> collection) {
+		for (Object element : collection) {
+			if (!contains(element)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public T get(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		return array[index];
 	}
 
 	@Override
-	public T set(int index, T element) {
-		// TODO Auto-generated method stub
-		return null;
+	public int indexOf(Object target) {
+		// TODO: FILL THIS IN!
+		return -1;
+	}
+
+	private boolean equals(Object target, Object element) {
+		if (target == null) {
+			return element == null;
+		} else {
+			return target.equals(element);
+		}
 	}
 
 	@Override
-	public void add(int index, T element) {
-		// TODO Auto-generated method stub
-		
+	public boolean isEmpty() {
+		return size == 0;
 	}
 
 	@Override
-	public T remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterator<T> iterator() {
+		T[] copy = Arrays.copyOf(array, size);
+		return Arrays.asList(copy).iterator();
 	}
 
 	@Override
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public int lastIndexOf(Object target) {
 
-	@Override
-	public int lastIndexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+		// 01.target이 뒤에서부터 몇번째 인덱스와 같은지 확인 후 인덱스를 리턴
+		for (int i = size - 1; i >= 0; i--) {
+			if (equals(target, array[i])) {
+				return i;
+			}
+		}
+		// 02.같은 것이 없으면 -1반환
+		return -1;
 	}
 
 	@Override
 	public ListIterator<T> listIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		T[] copy = Arrays.copyOf(array, size);
+		return Arrays.asList(copy).listIterator();
 	}
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-		// TODO Auto-generated method stub
+		T[] copy = Arrays.copyOf(array, size);
+		return Arrays.asList(copy).listIterator(index);
+	}
+
+	@Override
+	public boolean remove(Object obj) {
+		int index = indexOf(obj);
+		if (index == -1) {
+			return false;
+		}
+		remove(index);
+		return true;
+	}
+
+	@Override
+	public T remove(int index) {
+		// TODO: FILL THIS IN!
 		return null;
 	}
 
 	@Override
-	public List<T> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
+	public boolean removeAll(Collection<?> collection) {
+		boolean flag = true;
+		for (Object obj : collection) {
+			flag &= remove(obj);
+		}
+		return flag;
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> collection) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public T set(int index, T element) {
+		// TODO: FILL THIS IN!
 		return null;
 	}
 
+	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public List<T> subList(int fromIndex, int toIndex) {
+		if (fromIndex < 0 || toIndex >= size || fromIndex > toIndex) {
+			throw new IndexOutOfBoundsException();
+		}
+		T[] copy = Arrays.copyOfRange(array,fromIndex,toIndex);
+		return Arrays.asList(copy);
+	}
+
+	@Override
+	public Object[] toArray() {
+		return Arrays.copyOf(array, size);
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		throw new UnsupportedOperationException();
+	}
 }
