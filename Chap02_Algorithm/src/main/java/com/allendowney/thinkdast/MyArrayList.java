@@ -50,10 +50,10 @@ public class MyArrayList<T> implements List<T> {
 	public void add(int index, T element) {
 
 		// 01. index validation 체크
-		if (index < 0 || index > size) {
+		if (index < 0 || index >= size) {
 			throw new IndexOutOfBoundsException();
 		}
-		// 02.element를 add하면서 array배열 사이즈를 1 늘린다.
+		// 02.element를 add하면서 array배열 사이즈를 늘린다.
 		add(element);
 
 		// 03.[index+1] 위치부터 한 칸 씩 뒤로 이동시킨다.
@@ -193,7 +193,14 @@ public class MyArrayList<T> implements List<T> {
 	@Override
 	public T set(int index, T element) {
 		// TODO: FILL THIS IN!
-		return null;
+		if(index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		T previoslyElement = array[index];
+		array[index] = element;
+			
+		return previoslyElement;
 	}
 
 	@Override
